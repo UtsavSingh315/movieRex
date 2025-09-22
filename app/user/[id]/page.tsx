@@ -84,7 +84,7 @@ function getUserData(movies: Movie[], userId: string): UserData {
  *   "Beautiful Mind, A" -> "A Beautiful Mind"
  *   "Man Who Knew Too Much, An" -> "An Man Who Knew Too Much"
  */
-export function fixMovieLensTitle(title: string): string {
+function fixMovieLensTitle(title: string): string {
   // Regex: match any title ending with ", The", ", A", ", An"
   const regex = /(.*),\s(The|A|An)$/;
 
