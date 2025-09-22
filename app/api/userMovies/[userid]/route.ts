@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { userid } = params;
-    console.log('Fetching movies for userid:', userid);
+    console.log("Fetching movies for userid:", userid);
 
     // Join user_movie_rec with movies
     const results = await db
@@ -23,8 +23,8 @@ export async function GET(
       .innerJoin(movies, eq(userMovieRec.movieid, movies.movieid))
       .where(eq(userMovieRec.userid, userid));
 
-    console.log('Raw database results:', results);
-    console.log('Number of results:', results.length);
+    console.log("Raw database results:", results);
+    console.log("Number of results:", results.length);
 
     const transformed = results.map((row) => {
       // Extract year from title (last 4 digits inside parentheses)
@@ -49,12 +49,18 @@ export async function GET(
       };
     });
 
-    console.log('Transformed results:', transformed);
+    console.log("Transformed results:", transformed);
     return NextResponse.json(transformed);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching user movies:", error);
-    console.error("Error details:", error.message);
-    console.error("Error stack:", error.stack);
+
+    if (error instanceof Error) {
+      console.error("Error details:", error.message);
+      console.error("Error stack:", error.stack);
+    } else {
+      console.error("Unknown error type:", error);
+    }
+
     return NextResponse.json(
       { error: "Failed to fetch user movies" },
       { status: 500 }
